@@ -28,7 +28,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private func showSplashThenSettings() {
         let splash = makeSplashWindow()
         splashWindow = splash
-        splash.center()
+        // Always dead-center on the primary display; center() picks the
+        // "current" screen and sits above vertical center. Use frame, not
+        // visibleFrame, so the Dock and menu bar don't skew the position.
+        if let contentView = splash.contentViewController?.view {
+            splash.setContentSize(contentView.fittingSize)
+        }
+        if let screen = NSScreen.screens.first ?? NSScreen.main {
+            let size = splash.frame.size
+            splash.setFrameOrigin(NSPoint(x: screen.frame.midX - size.width / 2,
+                                          y: screen.frame.midY - size.height / 2))
+        }
         splash.alphaValue = 0
         splash.orderFrontRegardless()
         NSAnimationContext.runAnimationGroup { context in
