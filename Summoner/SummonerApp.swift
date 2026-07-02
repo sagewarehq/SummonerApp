@@ -14,6 +14,7 @@ struct SummonerApp: App {
     var body: some Scene {
         MenuBarExtra("Summoner", systemImage: "keyboard") {
             MenuContent()
+                .environmentObject(delegate)
         }
     }
 }

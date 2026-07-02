@@ -8,3 +8,4 @@ xcuserdata/
 # Build artifacts
 DerivedData/
 build/
+dist/

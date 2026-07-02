@@ -79,26 +79,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     // MARK: - Settings window
 
     func showSettings() {
-        if #available(macOS 14.0, *) {
-            NSApp.activate()
-        } else {
-            NSApp.activate(ignoringOtherApps: true)
+        if settingsWindow == nil {
+            let window = NSWindow(contentRect: .zero,
+                                  styleMask: [.titled, .closable, .miniaturizable],
+                                  backing: .buffered,
+                                  defer: false)
+            window.contentViewController = NSHostingController(
+                rootView: SettingsView().environmentObject(store)
+            )
+            window.title = "Summoner Settings"
+            window.isReleasedWhenClosed = false
+            window.center()
+            settingsWindow = window
         }
-        if let window = settingsWindow {
-            window.makeKeyAndOrderFront(nil)
-            return
-        }
-        let window = NSWindow(contentRect: .zero,
-                              styleMask: [.titled, .closable, .miniaturizable],
-                              backing: .buffered,
-                              defer: false)
-        window.contentViewController = NSHostingController(
-            rootView: SettingsView().environmentObject(store)
-        )
-        window.title = "Summoner Settings"
-        window.isReleasedWhenClosed = false
-        window.center()
-        settingsWindow = window
-        window.makeKeyAndOrderFront(nil)
+        settingsWindow?.makeKeyAndOrderFront(nil)
+        // As an LSUIElement app, cooperative activation (macOS 14+) is never
+        // granted from a menu bar extra click, so force activation.
+        NSApp.activate(ignoringOtherApps: true)
     }
 }
