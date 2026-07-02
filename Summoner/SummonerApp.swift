@@ -9,9 +9,26 @@ import SwiftUI
 
 @main
 struct SummonerApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
+
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MenuBarExtra("Summoner", systemImage: "keyboard") {
+            MenuContent()
         }
+    }
+}
+
+struct MenuContent: View {
+    @EnvironmentObject private var delegate: AppDelegate
+
+    var body: some View {
+        Button("Settings…") {
+            delegate.showSettings()
+        }
+        Divider()
+        Button("Quit Summoner") {
+            NSApp.terminate(nil)
+        }
+        .keyboardShortcut("q")
     }
 }
