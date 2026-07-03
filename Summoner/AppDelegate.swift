@@ -93,8 +93,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             settingsWindow = window
         }
         settingsWindow?.makeKeyAndOrderFront(nil)
-        // As an LSUIElement app, cooperative activation (macOS 14+) is never
-        // granted from a menu bar extra click, so force activation.
+        // Cooperative activation (macOS 14+) is not granted from a menu bar
+        // extra click, so force activation.
         NSApp.activate(ignoringOtherApps: true)
     }
 }
